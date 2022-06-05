@@ -155,18 +155,6 @@ public class DuckMovement : MonoBehaviour
         //checks if the player is on ground by checking if the groundCheck (at the bottom of player) is on the ground
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        // if space bar is pressed and the player is on the ground, will jump
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            // Calls the jumping function
-            StartCoroutine(Jumping());
-
-            // Sets the animator "Run" float to 0, meaning it will not do the run animation.
-            // Vice versa, setting the "Jump" float to 1, meaning it will do the jump animation
-            animator.SetFloat("Run", 0);
-            animator.SetFloat("Jump", 1);
-        }
-
         // if is ground (meaning it's running right now), it will reset the stepOffSet back to what it was
         if (isGrounded && velocity.y < 0)
         {
@@ -179,6 +167,19 @@ public class DuckMovement : MonoBehaviour
             animator.SetFloat("Run", 1);
             animator.SetFloat("Jump", 0);
         }
+
+        // if space bar is pressed and the player is on the ground, will jump
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            // Calls the jumping function
+            StartCoroutine(Jumping());
+
+            // Sets the animator "Run" float to 0, meaning it will not do the run animation.
+            // Vice versa, setting the "Jump" float to 1, meaning it will do the jump animation
+            animator.SetFloat("Run", 0);
+            animator.SetFloat("Jump", 1);
+        }
+
 
         // Applies the gravity force to the player
         velocity.y += gravity * Time.deltaTime;

@@ -8,6 +8,10 @@ public class DuckCollider : MonoBehaviour
 
     // This function gets called whenever the duck collider hits something.
     // ControllerColliderHit is a type of variable that stores the information of the object being hit by the duck, the name I gave it is colObj (Collided Object)
+
+    // Reference to the DuckMovement.cs script
+    public DuckMovement movement;
+
     void OnControllerColliderHit(ControllerColliderHit colObj)
     {
 
@@ -23,6 +27,7 @@ public class DuckCollider : MonoBehaviour
         // If the tag was "LoseTrigger", meaning it's something that you shouldn't have touched, you will lose.
         if(tag == "LoseTrigger")
         {
+            movement.enabled = false;
             FindObjectOfType<GameManager>().EndGame();
         }
 
