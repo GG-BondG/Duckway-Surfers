@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject PauseMenu;
     public GameObject LoseMenu;
+
+    public Text resumeText;
 
     bool gamePaused = false;
 
@@ -40,7 +43,7 @@ public class GameManager : MonoBehaviour
         {
             if (gamePaused)
             {
-                StartCoroutine(DelayedResume());
+                StartCoroutine(Resume());
             }
             else
             {
@@ -48,22 +51,30 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public IEnumerator DelayedResume()
+    public IEnumerator Resume()
     {
+        resumeText.text = "3";
         yield return new WaitForSecondsRealtime(1f);
-
+        resumeText.text = "2";
         yield return new WaitForSecondsRealtime(1f);
-
+        resumeText.text = "1";
         yield return new WaitForSecondsRealtime(1f);
-
+        resumeText.text = "Go!";
         PauseMenu.SetActive(false);
         Time.timeScale = 1f;
         gamePaused = false;
+        yield return new WaitForSecondsRealtime(1.5f);
+        resumeText.text = "";
     }
     public void Pause()
     {
         PauseMenu.SetActive(true);
         Time.timeScale = 0f;
         gamePaused = true;
+    }
+
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene("IntroScene");
     }
 }
