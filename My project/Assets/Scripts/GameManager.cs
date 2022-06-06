@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject PauseMenu;
     public GameObject LoseMenu;
+    public GameObject CurrentMenu;
 
     public Text resumeText;
 
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
     public void Lost()
     {
         LoseMenu.SetActive(true);
+        CurrentMenu.SetActive(false);
     }
 
     public void Restart()
@@ -42,10 +44,28 @@ public class GameManager : MonoBehaviour
         LoseMenu.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+    public GameObject HelpPanel;
+    public GameObject MainPanel;
+    bool isHelp = false;
+    public void HelpMenu()
+    {
+        if (isHelp)
+        {
+            isHelp = false;
+            HelpPanel.SetActive(false);
+            MainPanel.SetActive(true);
+        }
+        else
+        {
+            isHelp = true;
+            HelpPanel.SetActive(true);
+            MainPanel.SetActive(false);
+        }
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "GameScene")
+        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "GameScene" && LoseMenu.active == false)
         {
             if (gamePaused)
             {

@@ -26,5 +26,11 @@ public class Credits : MonoBehaviour
 
     //Replay Button --> http://pixelartmaker.com/art/f34327dc2ac6170
 
+    //Coin Model --> "BarracudaByte" from sketchfab.com, https://sketchfab.com/3d-models/stylized-coin-8cd6f95c44994ed5944a42892d0ffc10
+
+    //Coin Picture --> https://www.pixilart.com/art/star-coin-1-ce8412926494a33
+
+    //Info Picture --> http://pixelartmaker.com/art/2c1b90343410b08
+
     //Thank you guys very much!
 }

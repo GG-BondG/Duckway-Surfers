@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DuckCollider : MonoBehaviour
 {
@@ -12,6 +13,24 @@ public class DuckCollider : MonoBehaviour
     // Reference to the DuckMovement.cs script
     public DuckMovement movement;
 
+    float coinNumber = 0;
+
+    public Text coinDisplay;
+
+    public Text finalCoinDisplay;
+    private void Update()
+    {
+        coinDisplay.text = coinNumber.ToString();
+        finalCoinDisplay.text = coinNumber.ToString();
+    }
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.tag == "Coin")
+        {
+            coinNumber += 1;
+            Destroy(col.gameObject);
+        }
+    }
     void OnControllerColliderHit(ControllerColliderHit colObj)
     {
 
