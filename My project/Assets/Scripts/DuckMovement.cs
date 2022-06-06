@@ -26,7 +26,7 @@ public class DuckMovement : MonoBehaviour
     public Transform groundCheck;
 
     // A float for storing the groundDistance
-    float groundDistance = 0.4f;
+    float groundDistance = 1f;
 
     // A LayerMask variable for seeing which LayerMask will be the "groundMask", meaning the LayerMask that the player can jump on
     public LayerMask groundMask;
@@ -110,16 +110,16 @@ public class DuckMovement : MonoBehaviour
 
         //Path Switching (Checking Part)
         // Checks through which path the duck is at depending on its x position, if the x position matches the benchmark required for each route.
-        // Every benchmark has a 0.1f fine-tune because the player cannot smoothly arrive at the exact position.
-        if (transform.position.x > rightPosition - 0.1f && transform.position.x < rightPosition + 0.1f)
+        // Every benchmark has a 0.2f fine-tune because the player cannot smoothly arrive at the exact position.
+        if (transform.position.x > rightPosition - 0.2f && transform.position.x < rightPosition + 0.2f)
         {
             currentPath = "Right";
         }
-        else if(transform.position.x > middlePosition - 0.1f && transform.position.x < middlePosition + 0.1f)
+        else if(transform.position.x > middlePosition - 0.2f && transform.position.x < middlePosition + 0.2f)
         {
             currentPath = "Middle";
         }
-        else if(transform.position.x > leftPosition - 0.1f && transform.position.x < leftPosition + 0.1f)
+        else if(transform.position.x > leftPosition - 0.2f && transform.position.x < leftPosition + 0.2f)
         {
             currentPath = "Left";
         }
@@ -190,7 +190,7 @@ public class DuckMovement : MonoBehaviour
     IEnumerator Jumping()
     {
         // this is for waiting for 0.4 seconds then jump, this is because the animation has delay, if the jumping doesn't delays, the animation will start in mid-air
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.00001f);
 
         // Sets the stepOffset of the player to 2 to avoid jittering issues when jumping close to an object
         controller.stepOffset = 2;

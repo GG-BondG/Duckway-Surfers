@@ -22,5 +22,9 @@ public class Credits : MonoBehaviour
 
     //Back Button --> http://pixelartmaker.com/art/bc30079f0301e28
 
+    //Stop Button --> http://pixelartmaker.com/art/c789633440a1b8f
+
+    //Replay Button --> http://pixelartmaker.com/art/f34327dc2ac6170
+
     //Thank you guys very much!
 }

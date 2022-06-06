@@ -11,15 +11,14 @@ public class GameManager : MonoBehaviour
     // Bool used to store the information of whether or not the game has ended
     bool gameHasEnded = false;
 
-    // Float for controlling how much time will be delayed before restarting the game in seconds
-    public float delayedRestartTime;
-
     public GameObject PauseMenu;
     public GameObject LoseMenu;
 
     public Text resumeText;
 
     bool gamePaused = false;
+
+    public Animator animator;
 
     // This public function will be called by the DuckCollider.cs script when the duck hits something and loses.
     public void EndGame()
@@ -28,18 +27,25 @@ public class GameManager : MonoBehaviour
         {
             print("You lost!");
             gameHasEnded = true;
-            Invoke("Restart", delayedRestartTime);
+            animator.SetFloat("Run", 0f);
+            Invoke("Lost", 2f);
         }
+    }
+
+    public void Lost()
+    {
+        LoseMenu.SetActive(true);
     }
 
     public void Restart()
     {
+        LoseMenu.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "GameScene")
         {
             if (gamePaused)
             {
@@ -76,5 +82,14 @@ public class GameManager : MonoBehaviour
     public void ReturnToMenu()
     {
         SceneManager.LoadScene("IntroScene");
+    }
+    public void StartGame()
+    {
+        SceneManager.LoadScene("GameScene");
+        Time.timeScale = 1f;
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
