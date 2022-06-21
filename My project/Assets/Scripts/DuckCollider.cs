@@ -44,7 +44,7 @@ public class DuckCollider : MonoBehaviour
         }
 
         // If the tag was "LoseTrigger", meaning it's something that you shouldn't have touched, you will lose.
-        if(tag == "LoseTrigger")
+        if(tag == "LoseTriger")
         {
             movement.enabled = false;
             FindObjectOfType<GameManager>().EndGame();

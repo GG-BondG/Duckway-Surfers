@@ -61,11 +61,26 @@ public class DuckMovement : MonoBehaviour
         OGstepOffSet = controller.stepOffset;
     }
 
+    bool sliding = false;
+    IEnumerator Sliding()
+    {
+        yield return new WaitForSeconds(1.048f);
+        sliding = false;
+    }
     // This update function gets called every frame
     void Update()
     {
-        //Path Switching (Inputting Part)
+        //Sliding
+        if (Input.GetButtonDown("Fire3"))
+        {
+            StartCoroutine(Sliding());
+            print("Hi");
+            animator.SetFloat("Slide", 1);
+            animator.SetFloat("Run", 0);
+            sliding = true;
+        }
 
+        //Path Switching (Inputting Part)
         // if the player pressed left mouse button, will move left.
         if (Input.GetButtonDown("Fire1"))
         {
@@ -156,7 +171,7 @@ public class DuckMovement : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         // if is ground (meaning it's running right now), it will reset the stepOffSet back to what it was
-        if (isGrounded && velocity.y < 0)
+        if (isGrounded && velocity.y < 0 && sliding == false)
         {
             velocity.y = -2f;
 
@@ -166,6 +181,7 @@ public class DuckMovement : MonoBehaviour
             // Vice versa, setting the "Jump" float to 0, meaning it will not do the jump animation
             animator.SetFloat("Run", 1);
             animator.SetFloat("Jump", 0);
+            animator.SetFloat("Slide", 0);
         }
 
         // if space bar is pressed and the player is on the ground, will jump
