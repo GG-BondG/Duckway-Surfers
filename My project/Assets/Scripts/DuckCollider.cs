@@ -18,25 +18,38 @@ public class DuckCollider : MonoBehaviour
     public Text coinDisplay;
 
     public Text finalCoinDisplay;
+
+    public Animator animator;
+
+    public bool debug = false;
     private void Update()
     {
         coinDisplay.text = coinNumber.ToString();
         finalCoinDisplay.text = coinNumber.ToString();
+        if(transform.position.y < 5.75f)
+        {
+            Lose();
+        }
     }
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Coin")
+        // This tag is for checking the tag of the collided object, seeing if it was tagged by me as "LoseTrigger" (if so, the player loses because he touched something that will make he lose)
+        tag = col.gameObject.tag;
+
+        
+        if (tag == "Coin")
         {
             coinNumber += 1;
             Destroy(col.gameObject);
         }
-    }
-    void OnControllerColliderHit(ControllerColliderHit colObj)
-    {
 
-        // This tag is for checking the tag of the collided object, seeing if it was tagged by me as "LoseTrigger" (if so, the player loses because he touched something that will make he lose)
-        tag = colObj.gameObject.tag;
-        
+        ///This print statement can be a comment or an actual code without the //, it is for printing out the tag of the object that we collided with
+        //print(colObj.gameObject.tag);
+    }
+    void OnControllerColliderHit(ControllerColliderHit col)
+    {
+        tag = col.gameObject.tag;
+
         // If it wasn't tagged by us, it will just return
         if (tag == "Untagged")
         {
@@ -44,14 +57,15 @@ public class DuckCollider : MonoBehaviour
         }
 
         // If the tag was "LoseTrigger", meaning it's something that you shouldn't have touched, you will lose.
-        if(tag == "LoseTriger")
+        if (tag == "LoseTrigger" && !debug)
         {
-            movement.enabled = false;
-            FindObjectOfType<GameManager>().EndGame();
+            Lose();
         }
-
-        ///This print statement can be a comment or an actual code without the //, it is for printing out the tag of the object that we collided with
-        //print(colObj.gameObject.tag);
-        
+    }
+    void Lose()
+    {
+        animator.SetFloat("Run", 0);
+        movement.enabled = false;
+        FindObjectOfType<GameManager>().EndGame();
     }
 }

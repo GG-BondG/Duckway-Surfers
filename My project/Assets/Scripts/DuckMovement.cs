@@ -31,10 +31,6 @@ public class DuckMovement : MonoBehaviour
     // A LayerMask variable for seeing which LayerMask will be the "groundMask", meaning the LayerMask that the player can jump on
     public LayerMask groundMask;
 
-    // float for storing the Original stepOffSet when the player was on the ground, the stepOffSet will be changed when the player jumps (for avoiding jittering issues)
-    // Kinda complicated thing to know, it's important but not that important, just like a patch for a bug Unity has.
-    float OGstepOffSet;
-
     // Variable for storing the current velocity
     Vector3 velocity;
 
@@ -55,17 +51,13 @@ public class DuckMovement : MonoBehaviour
     // String for storing what the currentPath is, for example "Middle"/"Right"/"Left"
     string currentPath;
 
-    // This start function gets called at the start by default, will set the OGstepOffSet to the controller.stepOffset, so we won't lose the original value later on when we change the controller.stepOffSet.
-    void Start()
-    {
-        OGstepOffSet = controller.stepOffset;
-    }
-
-    bool sliding = false;
     IEnumerator Sliding()
     {
-        yield return new WaitForSeconds(1.048f);
-        sliding = false;
+        yield return new WaitForSeconds(0.9f);
+        animator.SetFloat("Run", 1);
+        animator.SetFloat("Slide", 0); 
+        controller.center += new Vector3(0, controller.center.y, 0);
+        controller.height = 3f;
     }
     // This update function gets called every frame
     void Update()
@@ -77,7 +69,8 @@ public class DuckMovement : MonoBehaviour
             print("Hi");
             animator.SetFloat("Slide", 1);
             animator.SetFloat("Run", 0);
-            sliding = true;
+            controller.center -= new Vector3(0, controller.center.y/2, 0);
+            controller.height = 0f;
         }
 
         //Path Switching (Inputting Part)
@@ -170,18 +163,16 @@ public class DuckMovement : MonoBehaviour
         //checks if the player is on ground by checking if the groundCheck (at the bottom of player) is on the ground
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        // if is ground (meaning it's running right now), it will reset the stepOffSet back to what it was
-        if (isGrounded && velocity.y < 0 && sliding == false)
+        // if is ground (meaning it's running right now)
+        if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
 
-            controller.stepOffset = OGstepOffSet;
-
             // Sets the animator "Run" float to 1, meaning it will do the run animation.
             // Vice versa, setting the "Jump" float to 0, meaning it will not do the jump animation
-            animator.SetFloat("Run", 1);
-            animator.SetFloat("Jump", 0);
-            animator.SetFloat("Slide", 0);
+            //animator.SetFloat("Run", 1);
+            //animator.SetFloat("Jump", 0);
+            //animator.SetFloat("Slide", 0);
         }
 
         // if space bar is pressed and the player is on the ground, will jump
@@ -189,6 +180,9 @@ public class DuckMovement : MonoBehaviour
         {
             // Calls the jumping function
             StartCoroutine(Jumping());
+
+            // Applies the forces to jump
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
             // Sets the animator "Run" float to 0, meaning it will not do the run animation.
             // Vice versa, setting the "Jump" float to 1, meaning it will do the jump animation
@@ -206,13 +200,11 @@ public class DuckMovement : MonoBehaviour
     IEnumerator Jumping()
     {
         // this is for waiting for 0.4 seconds then jump, this is because the animation has delay, if the jumping doesn't delays, the animation will start in mid-air
-        yield return new WaitForSeconds(0.00001f);
-
-        // Sets the stepOffset of the player to 2 to avoid jittering issues when jumping close to an object
-        controller.stepOffset = 2;
-
-        // Applies the forces to jump
-        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        yield return new WaitForSeconds(1.25f);
+        // Sets the animator "Run" float to 0, meaning it will not do the run animation.
+        // Vice versa, setting the "Jump" float to 1, meaning it will do the jump animation
+        animator.SetFloat("Run", 1);
+        animator.SetFloat("Jump", 0);
     }
     
 }
