@@ -7,6 +7,7 @@ public class DuckMovement : MonoBehaviour
 {
     // This script is for moving the player
 
+
     // References the character controller that we will be using to control the character.
     public CharacterController controller;
 
@@ -62,8 +63,9 @@ public class DuckMovement : MonoBehaviour
     // This update function gets called every frame
     void Update()
     {
+        Gyroscope();
         //Sliding
-        if (Input.GetButtonDown("Fire3"))
+        if (Vertical == "Down")
         {
             StartCoroutine(Sliding());
             print("Hi");
@@ -71,11 +73,11 @@ public class DuckMovement : MonoBehaviour
             animator.SetFloat("Run", 0);
             controller.center -= new Vector3(0, controller.center.y/2, 0);
             controller.height = 0f;
+            Vertical = "";
         }
-
         //Path Switching (Inputting Part)
         // if the player pressed left mouse button, will move left.
-        if (Input.GetButtonDown("Fire1"))
+        if (Horizontal == "Left")
         {
             // if at right currently, will set move_CMD to Right to Middle, moving left.
             if (currentPath == "Right")
@@ -93,10 +95,11 @@ public class DuckMovement : MonoBehaviour
                     move_CMD = "ML";
                 }
             }
+            Horizontal = "";
         }
         
         // if the player pressed right mouse button, will move right.
-        if (Input.GetButtonDown("Fire2"))
+        if (Horizontal == "Right")
         {
             // if at left currently, will set move_CMD to Left to Middle, moving right.
             if (currentPath == "Left")
@@ -114,6 +117,7 @@ public class DuckMovement : MonoBehaviour
                     move_CMD = "MR";
                 }
             }
+            Horizontal = "";
         }
 
         //Path Switching (Checking Part)
@@ -174,9 +178,8 @@ public class DuckMovement : MonoBehaviour
             //animator.SetFloat("Jump", 0);
             //animator.SetFloat("Slide", 0);
         }
-
         // if space bar is pressed and the player is on the ground, will jump
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Vertical == "Up" && isGrounded)
         {
             // Calls the jumping function
             StartCoroutine(Jumping());
@@ -188,13 +191,40 @@ public class DuckMovement : MonoBehaviour
             // Vice versa, setting the "Jump" float to 1, meaning it will do the jump animation
             animator.SetFloat("Run", 0);
             animator.SetFloat("Jump", 1);
+            Vertical = "";
         }
-
+        
 
         // Applies the gravity force to the player
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
+    }
+    public string Horizontal;
+    public string Vertical;
+    public void RightButton()
+    {
+        Horizontal = "Right";
+    }
+    public void LeftButton()
+    {
+        Horizontal = "Left";
+    }
+    public void UpButton()
+    {
+        Vertical = "Up";   
+    }
+    public void DownButton()
+    {
+        Vertical = "Down";
+    }
+    void Gyroscope()
+    {
+        if (SystemInfo.supportsGyroscope)
+        {
+            print(Input.gyro.attitude);
+            
+        }
     }
     // IEnumerator function for jumping, this is in IEnumerator because the jumping needs to be delayed, and it's only viable through an IEnumerator
     IEnumerator Jumping()
